@@ -61,13 +61,13 @@ const userSchema = new Schema({
 );
 
 //pre hook
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function() {
 
-    if(!this.isModified("password")) return next()
+    if(!this.isModified("password")) return //next()
 
     
     this.password = await bcrypt.hash(this.password, 10)
-    next()
+    // next()
     
 })
 

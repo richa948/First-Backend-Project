@@ -14,7 +14,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
   //check for user creation
   //response return
 const registerUser = asyncHandler(async (req, res) => {
- 
+ console.log(req.files)
   const { fullname, email, password, username } = req.body;
 
   //   if (
@@ -40,6 +40,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
  const coverImageLocalPath =  req.files?.coverImage[0]?.path;
 
+ //example
+ console.log("req.files", req.files)
+ console.log("avatarLocalPath", avatarLocalPath);
+ console.log("coverImageLocalPath", coverImageLocalPath);
+
   if(!avatarLocalPath){
     throw new ApiError(400, "avatar file is required")
   }
@@ -47,11 +52,14 @@ const registerUser = asyncHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
+  //exa
+  console.log("avatar res :" , avatar)
+
   if(!avatar){
     throw new ApiError(400, "Avatar field is required");
   }
 
-  User.create({
+  const user = await User.create({
     fullname,
     avatar: avatar.url,
     coverImage: coverImage?.url || "",
@@ -71,6 +79,7 @@ return res
   .json(new ApiResponse(200, createdUser, "user registered successfully"));
 
 });
+
 
 
 
